@@ -23,22 +23,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class ArticleFragment extends Fragment {
-    final static String ARG_POSITION = "position";
-    int mCurrentPosition = -1;
-    TextView article;
+    public final static String ARG_POSITION = "position";
+    private int currentPosition = -1;
+    private TextView article;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
-        Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // If activity recreated (such as from screen rotate), restore
         // the previous article selection set by onSaveInstanceState().
         // This is primarily necessary when in the two-pane layout.
         if (savedInstanceState != null)
-            mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
+            currentPosition = savedInstanceState.getInt(ARG_POSITION);
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.article_view, container, false);
+        View view = inflater.inflate(R.layout.article_fragment, container, false);
         article = (TextView) view.findViewById(R.id.article);
         return view;
     }
@@ -55,20 +54,20 @@ public class ArticleFragment extends Fragment {
         if (args != null) {
             // Set article based on argument passed in
             updateArticleView(args.getInt(ARG_POSITION));
-        } else if (mCurrentPosition != -1) {
+        } else if (currentPosition != -1) {
             // Set article based on saved instance state defined during onCreateView
-            updateArticleView(mCurrentPosition);
+            updateArticleView(currentPosition);
         }
     }
 
     public void updateArticleView(int position) {
-        article.setText(Ipsum.Articles[position]);
-        mCurrentPosition = position;
+        article.setText(getResources().getStringArray(R.array.articles)[position]);
+        currentPosition = position;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(ARG_POSITION, mCurrentPosition);
+        outState.putInt(ARG_POSITION, currentPosition);
     }
 }
